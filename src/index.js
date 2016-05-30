@@ -1,10 +1,13 @@
 import SendGrid from 'sendgrid';
 
 let SimpleSendGridAdapter = mailOptions => {
-  if (!mailOptions || !mailOptions.apiKey || !mailOptions.fromAddress) {
-    throw 'SimpleSendGridAdapter requires an API Key.';
+  if (!mailOptions || (!mailOptions.apiKey && !mailOptions.username && !mailOptions.password)){
+    throw 'SimpleSendGridAdapter requires an apiKey or username / password';
   }
-  let sendgrid = SendGrid(mailOptions.apiKey);
+  if (!mailOptions.fromAddress){
+    throw 'SimpleSendGridAdapter requires fromAddress';
+  }
+  let sendgrid = (mailOptions.apiKey ? SendGrid(mailOptions.apiKey) : SendGrid(mailOptions.username, mailOptions.password));
 
   let sendMail = ({to, subject, text}) => {
     return new Promise((resolve, reject) => {
