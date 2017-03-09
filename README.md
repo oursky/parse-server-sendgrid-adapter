@@ -23,6 +23,7 @@ var api = new ParseServer({
   emailAdapter: SimpleSendGridAdapter({
     apiKey: 'sendgridApiKey',
     fromAddress: 'fromEmailAddress',
+    fromName: 'Sender-Name'
   })
 });
 
