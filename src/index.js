@@ -6,14 +6,19 @@ let SimpleSendGridAdapter = mailOptions => {
   }
   let sendgrid = SendGrid(mailOptions.apiKey);
 
-  let sendMail = ({to, subject, text}) => {
-    return new Promise((resolve, reject) => {
-      sendgrid.send({
+  let sendMail = ({to, subject, text, html}) => {
+    const options = {
         from: mailOptions.fromAddress,
         to: to,
-        subject: subject,
-        text: text,
-      }, function(err, json) {
+        subject: subject
+    };
+    if(text) {
+      options.text = text;
+    } else if(html) {
+      options.html = html;
+    }
+    return new Promise((resolve, reject) => {
+      sendgrid.send(options, function(err, json) {
         if (err) {
            reject(err);
         }
